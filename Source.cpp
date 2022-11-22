@@ -14,14 +14,14 @@
 #include <sstream>
 using namespace std;
 
-//check if number or string
+//Check if number or string 
 bool check_number(string str) {
 	for (int i = 0; i < str.length(); i++)
 		if (isdigit(str[i]) == false)
 			return false;
 	return true;
 }
-//count number of digits: THIS FUNCTION DOESNT WORK WELL
+//Count number of digits
 int countDigit(long long n)
 {
 	if (n == 0)
@@ -34,40 +34,87 @@ int countDigit(long long n)
 	return count;
 }
 
+//Find the last digit
+int lastDigit(int n)
+{
+	return (n % 10);
+}
+
 int main() {
 
 	string card_no;
 	cout << "Type your credit card number: "; // Type a number and press enter
-	cin >> card_no; // Get user input from the keyboard
-	cout << "Your number is: " << card_no << endl; // Display the input value
+	cin >> card_no; // Get user input 
+	//cout << "Your number is: " << card_no << endl; // Display the input value
 
-	//0. Check if user input is only int and the correct number of digits
-	if (check_number(card_no))
-		cout << card_no << " is an integer" << endl;
-	else
-		cout << card_no << " is a string" << endl;
+	//0. Check if user input is int only 
+	bool initializer = true;
+		while (initializer) {
+			if (check_number(card_no)) {
+				cout << card_no << " is an integer." << endl;
 
-	stringstream stream(card_no);
-	int card_no_int;
-	stream >> card_no_int;
+				//Output the card number as an integer (back from string)
+				stringstream stream(card_no);
+				long long card_no_int;
+				stream >> card_no_int;
+				long long n = card_no_int;
 
-	long long n = card_no_int;
-	cout << "Number of digits : " << countDigit(n) << endl;
+				//1. Check if the input has the right number of digits
+				int dgts = countDigit(n);
+				cout << "Number of digits : " << dgts << "\n" << endl;
 
-	if (n == 16 )
-		cout << "Valid" << endl;
-	else
-		cout << "Not a credit card number." << endl;
+				if (dgts == 16 || dgts == 17) {
+					cout << "Valid." << endl;
+					initializer = false;
+				}
+				else {
+					cout << "Number of digits not correct. " << endl;
+					goto jump;					
+				}
+			}
+			else {
+				cout << card_no << " is a string. " << endl;
+			jump:
+				cout << "Input a proper CC number or exit with 'x'. \n" << endl;
+				cout << "Type your credit card number: "; // Type a number and press enter
+				cin >> card_no; // Get user input 
+				if (card_no == "x")
+					return 0;
+			}
+		}
+		
+	
 	
 
-	//1. Major industry identifier (MII)  
-
+	//1. Major industry identifier (MII) (OSKAR)
+		/*
+		Create a list with MII categories assigned to numbers 0-9. Spit out the correct category based on the first digit of card_no
+		*/
 
 	//2. BIN/IIN (Bank/Issuer Identification Number)
 
 	//3. Personal account number
 
 	//4. Luhn Algorithm
+		/*
+		Example: 347609692102916
+		1. Take last digit: 6
+		*/
+	//int last_d = lastDigit(card_no_int);
+	//cout << last_d << " is the last digit." << endl;
+	/*
+		2. Take the rest of the sequence: 34760969210291
+		3. Double every other digit starting from the right 3,8,7,12,0,18,6,18,2,2,0,4,9,2.
+		4. Sum the digits of the products 12 = 1 + 2 = 3, same with 18 that gives you 9
+		5. Add all the digits together 3+8+7+3+0+9+6+9+2+2+0+4+9+2 = 64
+		6. Multiply the result by 9, 64 * 9 = 576
+		7. Take the last digit of the result 6. If this matches the check digit, then we have a valid sequence.
+		8.Since our check digit 6 matches our result 6, we conclude that this sequence is a valid credit card number.
+		*/
 
-	//5. Credit card prefix numbers
+	//5. Credit card prefix numbers (OSKAR)
+		/*
+		Create a list with credit card issuers assigned to prefix numbers. Spit out the correct credit card issuer.
+		*/
+
 }
